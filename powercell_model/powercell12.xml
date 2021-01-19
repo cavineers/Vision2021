@@ -1,0 +1,26 @@
+<annotation>
+	<folder>images</folder>
+	<filename>powercell12.png</filename>
+	<path>/Users/ryanbode/Desktop/powercell_model/images/powercell12.png</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>894</width>
+		<height>502</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>powercell</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>193</xmin>
+			<ymin>282</ymin>
+			<xmax>258</xmax>
+			<ymax>343</ymax>
+		</bndbox>
+	</object>
+</annotation>
