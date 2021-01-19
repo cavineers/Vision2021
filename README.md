@@ -4,9 +4,9 @@
 ## Resources / Research
 **Note:** this list will be updated as more resources become available...
 
-[Vision on TensorFlow Lite](https://www.tensorflow.org/lite/models/object_detection/overview#model_customization) \n
-[TensorFlow Models GitHub Repository](https://github.com/tensorflow/models) \n
-[Tranfer Learning with TensorFlow Video Resource](https://www.coursera.org/lecture/device-based-models-tensorflow/transfer-learning-with-tflite-y7OPK) \n
+[Vision on TensorFlow Lite](https://www.tensorflow.org/lite/models/object_detection/overview#model_customization)\
+[TensorFlow Models GitHub Repository](https://github.com/tensorflow/models)\
+[Tranfer Learning with TensorFlow Video Resource](https://www.coursera.org/lecture/device-based-models-tensorflow/transfer-learning-with-tflite-y7OPK)\
 
 ## Methods
 1. We will be using a method called transfer learning to use a previously trained TensorFlow Model to fit our specific requirments.
