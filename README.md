@@ -7,7 +7,8 @@
 [Vision on TensorFlow Lite](https://www.tensorflow.org/lite/models/object_detection/overview#model_customization)\
 [TensorFlow Models GitHub Repository](https://github.com/tensorflow/models)\
 [Tranfer Learning with TensorFlow Video Resource](https://www.coursera.org/lecture/device-based-models-tensorflow/transfer-learning-with-tflite-y7OPK)\
-[Already Trained TensorFlow Models](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf1_detection_zoo.md#pixel4-edge-tpu-models)
+[Already Trained TensorFlow Models](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf1_detection_zoo.md#pixel4-edge-tpu-models)\
+[Custom ML Model Guide](https://towardsdatascience.com/how-to-train-your-own-object-detector-with-tensorflows-object-detector-api-bec72ecfe1d9)
 
 ## Methods
 1. We will be using a method called transfer learning to use a previously trained TensorFlow Model to fit our specific requirments.
