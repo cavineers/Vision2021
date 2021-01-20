@@ -10,11 +10,11 @@ YOLOv5 is an AI object detection library used for real time object detection.
 [Other YOLOv5 Information](https://medium.com/towards-artificial-intelligence/yolo-v5-is-here-custom-object-detection-tutorial-with-yolo-v5-12666ee1774e)
 
 ## Usage
-**NOTE: ALL Packages and Modules Sit In the Virtual Environment using virtualenv. To run any commands for this repo you must enter the venv.** FROM THE YOLOv5_trained_model DIRECTORY Type `source venv/bin/activate` to start the environmental variable\
+**NOTE: ALL Packages and Modules Sit In the Virtual Environment using virtualenv. To run any commands for this repo you must enter the venv.** FROM THE YOLOv5_trained_model DIRECTORY Type `source venv/bin/activate` to start the environmental variable
 
 The files in the powercell_model/YOLOv5_Trained_Model directory are all the trained ML models. It consists of the data.yaml, custom_yolov5s.yaml, and a best.pt that is the trained model file.
 
-*Note: Roboflow is used for the creation of the yolov5 format.*\
+*Note: Roboflow is used for the creation of the yolov5 format.*
 
 To get (or update) the trained model:
 1. collect training images (pictures of what you want to detect)
