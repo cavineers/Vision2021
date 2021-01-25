@@ -26,16 +26,16 @@ To get (or update) the trained model:
 6. download the data.yaml, custom_yolov5s.yaml, and a best.pt files from the menu in the left side of the screen.
 7. push those files to the repository
 
-To test against images clone this repository and then put the testing images into the test_imgs dir and type `python3 detect.py --weights ./best.pt  --source ./test_imgs` in a terminal to run a detection. It will output the resulted images into the runs directory.\
+To test against images clone this repository and then put the testing images into the test_imgs dir and type `python3 detect.py --weights ./best.pt  --source ./test_imgs` in a terminal to run a detection. It will output the resulted images into the runs directory.
 To run against a webcam in real time run this command `python3 detect.py --weights ./best.pt  --source 0` changing the source to be 0.
 
 ### To create a venv (Using python 3.8 since 3.9 does not work yet with certain packages)
 1. download virtualenv with pip3 (`pip3 install virtualenv`)
 2. run `python3 -m venv /path/to/new/virtual/environment`
 3. enter the venv with `source venv/bin/activate`
-4. install the required dependancies in the virtual environment using the requirments.txt file: `pip3 install -qr requirements.txt`\
+4. install the required dependancies in the virtual environment using the requirments.txt file: `pip3 install -qr requirements.txt`
 
-*Note if you are on raspberry pi (or other ARM arch) you will need to install most of these manually... (use [resource](https://github.com/marcusvlc/pytorch-on-rpi) above for Pytorch, torchvision, and OpenCV)*\
+*Note if you are on raspberry pi (or other ARM arch) you will need to install most of these manually... (use [resource](https://github.com/marcusvlc/pytorch-on-rpi) above for Pytorch, torchvision. TO INSTALL OpenCV run `pip install opencv-contrib-python==4.1.0.25` as explained [here](https://www.pyimagesearch.com/2019/09/16/install-opencv-4-on-raspberry-pi-4-and-raspbian-buster/))*
 
 Close venv by typing `deactivate` into the terminal.
 
