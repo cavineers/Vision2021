@@ -7,7 +7,8 @@ YOLOv5 is an AI object detection library used for real time object detection.
 ## Resources
 [Colab copy where YOLOv5 models can be trained](https://colab.research.google.com/drive/1HlhGHEA7LSkETzBbx-9scGilpzTi1-sT?usp=sharing)\
 [YOLOv5 Information (training + getting data)](https://blog.roboflow.com/how-to-train-yolov5-on-a-custom-dataset/)\
-[Other YOLOv5 Information](https://medium.com/towards-artificial-intelligence/yolo-v5-is-here-custom-object-detection-tutorial-with-yolo-v5-12666ee1774e)
+[Other YOLOv5 Information](https://medium.com/towards-artificial-intelligence/yolo-v5-is-here-custom-object-detection-tutorial-with-yolo-v5-12666ee1774e)\
+[Installing Pytorch on Raspberry Pi](https://github.com/marcusvlc/pytorch-on-rpi)
 
 ## Usage
 **NOTE: ALL Packages and Modules Sit In the Virtual Environment using virtualenv. To run any commands for this repo you must enter the venv.** FROM THE YOLOv5_trained_model DIRECTORY Type `source venv/bin/activate` to start the environmental variable
@@ -29,10 +30,14 @@ To test against images clone this repository and then put the testing images int
 To run against a webcam in real time run this command `python3 detect.py --weights ./best.pt  --source 0` changing the source to be 0.
 
 ### To create a venv (Using python 3.8 since 3.9 does not work yet with certain packages)
-1. download virtualenv with pip3
+1. download virtualenv with pip3 (`pip3 install virtualenv`)
 2. run `python3 -m venv /path/to/new/virtual/environment`
 3. enter the venv with `source venv/bin/activate`
-4. install the required dependancies in the virtual environment using the requirments.txt file: `pip3 install -qr requirements.txt`
+4. install the required dependancies in the virtual environment using the requirments.txt file: `pip3 install -qr requirements.txt`\
+
+*Note if you are on raspberry pi (or other ARM arch) you will need to install most of these manually... (use [resource](https://github.com/marcusvlc/pytorch-on-rpi) above for Pytorch, torchvision, and OpenCV)*\
+
+Close venv by typing `deactivate` into the terminal.
 
 
 # DEPRECIATED temporarily... TensorFlow Items Below (*Depreciated* under new arch built on Yolov5)
