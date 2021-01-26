@@ -33,15 +33,18 @@ To run against a webcam in real time run this command `python3 detect.py --weigh
 1. download virtualenv with pip3 (`pip3 install virtualenv`)
 2. run `python3 -m venv /path/to/new/virtual/environment`
 3. enter the venv with `source venv/bin/activate`
-4. install the required dependancies in the virtual environment using the requirments.txt (on x86 computers) file: `pip3 install -qr requirements.txt`
+4. install the required dependancies in the virtual environment using the requirments.txt (on x86 computers only) file: `pip3 install -qr requirements.txt`
 
-**IMPORTANT** *NOTE if you are on raspberry pi (or other ARM arch) you will need to install most of these manually...*
+**IMPORTANT** *NOTE if you are on raspberry pi (or other ARMv7l - 32bit arch) you will need to install most of these manually...*
 
 1. Install PyTorch [Here](https://github.com/ljk53/pytorch-rpi/blob/master/torch-1.6.0a0%2Bb31f58d-cp37-cp37m-linux_armv7l.whl) from [source](https://github.com/ljk53/pytorch-rpi) once downloading the .whl file run `pip install <PATH TO .whl FILE>`
 2. Install OpenCV `pip install opencv-contrib-python==4.1.0.25` (this may take a while... up to 2 hours total)
-3. Install TorchVision (resource coming soon)
+3. Install TorchVision [Here](https://github.com/radimspetlik/pytorch_rpi_builds/blob/master/vision/torchvision-0.8.0a0%2B190a5f8-cp38-cp38-linux_armv7l.whl) Then change the file name to be `torchvision-0.8.0a0+190a5f8-cp37-cp37m-linux_armv7l.whl` (this ensures armv7l arch installable)
 
 Close venv by typing `deactivate` into the terminal.
+
+*To install these packages on ARMarch - 64bit (not raspi) arch see steps below*
+1. Visit [this site to find packages](http://mathinf.com/pytorch/arm64/)
 
 
 # DEPRECIATED temporarily... TensorFlow Items Below (*Depreciated* under new arch built on Yolov5)
