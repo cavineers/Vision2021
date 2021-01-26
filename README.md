@@ -33,9 +33,13 @@ To run against a webcam in real time run this command `python3 detect.py --weigh
 1. download virtualenv with pip3 (`pip3 install virtualenv`)
 2. run `python3 -m venv /path/to/new/virtual/environment`
 3. enter the venv with `source venv/bin/activate`
-4. install the required dependancies in the virtual environment using the requirments.txt file: `pip3 install -qr requirements.txt`
+4. install the required dependancies in the virtual environment using the requirments.txt (on x86 computers) file: `pip3 install -qr requirements.txt`
 
-*Note if you are on raspberry pi (or other ARM arch) you will need to install most of these manually... (use [resource](https://github.com/marcusvlc/pytorch-on-rpi) above for Pytorch, torchvision. TO INSTALL OpenCV run `pip install opencv-contrib-python==4.1.0.25` as explained [here](https://www.pyimagesearch.com/2019/09/16/install-opencv-4-on-raspberry-pi-4-and-raspbian-buster/))*
+**IMPORTANT** *NOTE if you are on raspberry pi (or other ARM arch) you will need to install most of these manually...*
+
+1. Install PyTorch [Here](https://github.com/ljk53/pytorch-rpi/blob/master/torch-1.6.0a0%2Bb31f58d-cp37-cp37m-linux_armv7l.whl) from [source](https://github.com/ljk53/pytorch-rpi) once downloading the .whl file run `pip install <PATH TO .whl FILE>`
+2. Install OpenCV `pip install opencv-contrib-python==4.1.0.25` (this may take a while... up to 2 hours total)
+3. Install TorchVision (resource coming soon)
 
 Close venv by typing `deactivate` into the terminal.
 
