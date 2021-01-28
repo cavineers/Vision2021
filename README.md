@@ -1,5 +1,5 @@
 # 2021_ObjectDetection_Vision
-2021 FIRST FRC Galactic Search Mission Vision Code. This code will be able to run real time object detection for the playing field using a RPI (4) and TensorFlow Lite. All the resources and vision code shall be updated as more information becomes available.
+2021 FIRST FRC Galactic Search Mission Vision Code. This code will be able to run real time object detection for the playing field using an Nvidia Jetson Nano and YOLOv5.
 
 # YOLOv5 Object Detection Information / Docs
 YOLOv5 is an AI object detection library used for real time object detection.
