@@ -46,8 +46,11 @@ Close venv by typing `deactivate` into the terminal.
 3. Install TorchVision [Here](https://github.com/radimspetlik/pytorch_rpi_builds/blob/master/vision/torchvision-0.8.0a0%2B190a5f8-cp38-cp38-linux_armv7l.whl) Then change the file name to be `torchvision-0.8.0a0+190a5f8-cp37-cp37m-linux_armv7l.whl` (this ensures armv7l arch installable)
 
 *To install packages on Nvidia Jetson Nano -- aarch64 see steps below*
-1. For PyTorch visit [the Nvidia Site](https://forums.developer.nvidia.com/t/pytorch-for-jetson-version-1-7-0-now-available/72048) and download the version of choice (1.6 or 1.7 will work) then pip install the package. Then run these sudo codes `sudo apt-get install libopenblas-base libopenmpi-dev` in order to get the lib files. You can also run [https://github.com/KumaTea/pytorch-aarch64](https://github.com/KumaTea/pytorch-aarch64) these to get the latest versions.
-2. For OpenCV run `pip install opencv-python`
+1. Download Nvidia Docker container by running `sudo docker pull nvcr.io/nvidia/l4t-pytorch:r32.5.0-pth1.7-py3`
+2. Start the docker container with `sudo docker run -it --rm --runtime nvidia --network host nvcr.io/nvidia/l4t-pytorch:r32.5.0-pth1.7-py3`
+3. Clone this repository 
+4. cd into the YOLOv5 directory.
+5. Update pip and install packages: `python3 -m pip install --upgrade pip`, `python3 -m pip install --upgrade setuptools`, `python3 -m pip install -r requirements.txt`
 
 *To install these packages on ARMarch - 64bit (not raspi) arch see steps below*
 1. Visit [this site to find packages](http://mathinf.com/pytorch/arm64/)
