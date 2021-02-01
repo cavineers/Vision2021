@@ -47,13 +47,14 @@ Close venv by typing `deactivate` into the terminal.
 
 *To install packages on Nvidia Jetson Nano -- aarch64 see steps below*
 1. Download Nvidia Docker container by running `sudo docker pull nvcr.io/nvidia/l4t-pytorch:r32.5.0-pth1.7-py3`
-2. Start the docker container with `sudo docker run -it --runtime nvidia --device=/dev/video0 --network host nvcr.io/nvidia/l4t-pytorch:r32.5.0-pth1.7-py3`
-3. Clone this repository
+2. Start the docker container with `sudo docker run -it --device=/dev/video0 --runtime nvidia --net=host --env="DISPLAY" volume="$HOME/.Xauthority:/root/.Xauthority:rw" nvcr.io/nvidia/l4t-pytorch:r32.5.0-pth1.7-py3`
+3. Clone this repository in the docker image `gi clone https://github.com/cavineers/2021_ObjectDetection_Vision.git`
 5. Remove all unwanted folders and packages (everything but the YOLOv5_Trained_Model folder)
-4. cd into the YOLOv5 directory.
+4. cd into the YOLOv5_Traained_Model directory.
 5. Update pip and install packages: `python3 -m pip install --upgrade pip`, `python3 -m pip install --upgrade setuptools`, `pip install -r requirements.txt` (these might take several minutes to finish)
-6. Save the docker container using `sudo docker commit [CONTAINER ID] [IMAGE NAME]`
-7. Run docker instance later `sudo docker run -it --runtime nvidia --device=/dev/video0 [IMAGE NAME]`
+6. In a new terminal find the container id for your docker image using `sudo docker ps -a`
+7. Still in the new terminal save the docker container using `sudo docker commit [CONTAINER ID] [IMAGE NAME]` (example image name would be yolov5/cavs:version1)
+8. Run docker instance later `sudo docker run -it --device=/dev/video0 --runtime nvidia --net=host --env="DISPLAY" volume="$HOME/.Xauthority:/root/.Xauthority:rw" [NEW IMAGE NAME]` (use -rm in the run command if you are not making any changes to the docker image to save space)
 
 *To install these packages on ARMarch - 64bit (not raspi) arch see steps below*
 1. Visit [this site to find packages](http://mathinf.com/pytorch/arm64/)
