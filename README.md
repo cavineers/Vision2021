@@ -54,7 +54,7 @@ Close venv by typing `deactivate` into the terminal.
 5. Update pip and install packages: `python3 -m pip install --upgrade pip`, `python3 -m pip install --upgrade setuptools`, `pip install -r requirements.txt` (these might take several minutes to finish)
 6. In a new terminal find the container id for your docker image using `sudo docker ps -a`
 7. Still in the new terminal save the docker container using `sudo docker commit [CONTAINER ID] [IMAGE NAME]` (example image name would be yolov5/cavs:version1)
-8. Run docker instance later `sudo docker run -it --device=/dev/video0 --runtime nvidia --net=host --env="DISPLAY" volume="$HOME/.Xauthority:/root/.Xauthority:rw" [NEW IMAGE NAME]` (use -rm in the run command if you are not making any changes to the docker image to save space)
+8. Run docker instance later `sudo docker run -it --device=/dev/video0 --runtime nvidia --net=host --env="DISPLAY" --volume="$HOME/.Xauthority:/root/.Xauthority:rw" [NEW IMAGE NAME]` (use -rm in the run command if you are not making any changes to the docker image to save space)
 
 *To install these packages on ARMarch - 64bit (not raspi) arch see steps below*
 1. Visit [this site to find packages](http://mathinf.com/pytorch/arm64/)
