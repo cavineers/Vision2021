@@ -60,13 +60,14 @@ def plot_one_box(x, img, color=None, label=None, line_thickness=None):
     width = int(x[0]) - int(x[2])
     height = int(x[1]) - int(x[3])
     ty = int(x[3]) + int(height / 2)
-    cameraHeight = 10 # TODO Change this value to match actual height on the bot
-    cameraAngel = 90 # TODO Change this value to match actual angel on the bot
+    cameraHeight = 32.75 # TODO Change this value to match actual height on the bot
+    cameraAngel = 0 # TODO Change this value to match actual angel on the bot
     distance = (3.5-cameraHeight)*(1/math.tan(math.radians(cameraAngel+ty)))
     print(distance)
     cv2.circle(img, (int(x[2]) + int(width / 2),int(x[3]) + int(height / 2)), 10, [0,0,255], -1)
     cv2.rectangle(img, c1, c2, color, thickness=tl, lineType=cv2.LINE_AA)
     if label:
+        print(label)
         tf = max(tl - 1, 1)  # font thickness
         t_size = cv2.getTextSize(label, 0, fontScale=tl / 3, thickness=tf)[0]
         c2 = c1[0] + t_size[0], c1[1] - t_size[1] - 3
