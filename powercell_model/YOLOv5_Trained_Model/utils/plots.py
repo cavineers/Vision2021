@@ -57,15 +57,16 @@ def plot_one_box(x, img, color=None, label=None, line_thickness=None):
     tl = line_thickness or round(0.002 * (img.shape[0] + img.shape[1]) / 2) + 1  # line/font thickness
     color = color or [random.randint(0, 255) for _ in range(3)]
     c1, c2 = (int(x[0]), int(x[1])), (int(x[2]), int(x[3]))
-    width = int(x[0]) - int(x[2])
-    height = int(x[1]) - int(x[3])
-    ty = int(x[3]) + int(height / 2)
+    width = int(x[2]) - int(x[0])
+    height = int(x[3]) - int(x[1])
+    ty = 0 - (int(x[3]) + int(-height / 2))
+    tx = 0 - (int(x[2]) + int(-width / 2))
     cameraHeight = 32.75 # TODO Change this value to match actual height on the bot
-    cameraAngel = 0 # TODO Change this value to match actual angel on the bot
-    ballHeight = 7
-    distance = (ballHeight-cameraHeight)*(1/math.tan(math.radians(cameraAngel+ty)))
-    print(distance)
-    cv2.circle(img, (int(x[2]) + int(width / 2),int(x[3]) + int(height / 2)), 10, [0,0,255], -1)
+    cameraAngle = 0 # TODO Change this value to match actual angel on the bot
+    ballHeight = 3.5
+    distance = (ballHeight-cameraHeight)*(1/math.tan(math.radians(cameraAngle+ty)))
+    print(f'Height: {height} Width: {width}')
+    cv2.circle(img, (int(x[2]) + int(-width / 2),int(x[3]) + int(-height / 2)), 10, [0,0,255], -1)
     cv2.rectangle(img, c1, c2, color, thickness=tl, lineType=cv2.LINE_AA)
     if label:
         print(label)
