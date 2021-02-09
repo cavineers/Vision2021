@@ -48,7 +48,7 @@ Close venv by typing `deactivate` into the terminal.
 *To install packages on Nvidia Jetson Nano -- aarch64 see steps below*
 1. Download Nvidia Docker container by running `sudo docker pull nvcr.io/nvidia/l4t-pytorch:r32.5.0-pth1.7-py3`
 2. Start the docker container with `sudo docker run -it --device=/dev/video0 --runtime nvidia --net=host --env="DISPLAY" --volume="$HOME/.Xauthority:/root/.Xauthority:rw" nvcr.io/nvidia/l4t-pytorch:r32.5.0-pth1.7-py3`
-3. Clone this repository in the docker image `gi clone https://github.com/cavineers/2021_ObjectDetection_Vision.git`
+3. Clone this repository in the docker image `git clone https://github.com/cavineers/Vision2021.git`
 5. Remove all unwanted folders and packages (everything but the YOLOv5_Trained_Model folder)
 4. cd into the YOLOv5_Traained_Model directory.
 5. Update pip and install packages: `python3 -m pip install --upgrade pip`, `python3 -m pip install --upgrade setuptools`, `pip install -r requirements.txt` (these might take several minutes to finish)
