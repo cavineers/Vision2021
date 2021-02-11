@@ -6,6 +6,8 @@ import cv2
 import torch
 import torch.backends.cudnn as cudnn
 from numpy import random
+import math
+from math import atan2, degrees
 
 from models.experimental import attempt_load
 from utils.datasets import LoadStreams, LoadImages
@@ -17,13 +19,9 @@ import websocket
 import asyncio
 from encodings import undefined
 
-uri = "ws://localhost:5808"
-ws = websocket.WebSocketApp(uri)
-ws.on_open = detect
-ws.run_forever()
-
-def detect(save_img=False):
-    global ws
+def detect(ws):
+    save_img=False
+    # global ws save_img=False
     source, weights, view_img, save_txt, imgsz = opt.source, opt.weights, opt.view_img, opt.save_txt, opt.img_size
     webcam = source.isnumeric() or source.endswith('.txt') or source.lower().startswith(
         ('rtsp://', 'rtmp://', 'http://'))
@@ -116,7 +114,22 @@ def detect(save_img=False):
 
                     if save_img or view_img:  # Add bbox to image
                         label = '%s %.2f' % (names[int(cls)], conf)
-                        ws.send("Test")
+                        c1, c2 = (int(xyxy[0]), int(xyxy[1])), (int(xyxy[2]), int(xyxy[3])) # x[0] = left line; x[1] = top line; x[2] = right line; x[3] = bottom line;
+                        cameraResolutionY = 1080
+                        cameraResolutionX = 1920
+                        cameraFieldOfView = 25 # 75 # TODO Change this value to match the field of view for the camera
+                        width = int(xyxy[2]) - int(xyxy[0])
+                        height = int(xyxy[3]) - int(xyxy[1])
+                        ty = (int(1080 / 2) - (int(xyxy[3]) + float(-height / 2))) * (cameraFieldOfView / cameraResolutionY)
+                        tx = (int(1920 / 2) - (int(xyxy[2]) + int(-width / 2))) * (cameraFieldOfView / cameraResolutionX)
+                        cameraHeight = 3 # TODO Change this value to match actual height on the bot
+                        cameraAngle = 0 # TODO Change this value to match actual angel on the bot
+                        ballHeight = 3.5
+                        distance = undefined
+                        if math.tan(math.radians(cameraAngle+ty)) != 0:
+                            distance = (ballHeight-cameraHeight) / (math.tan(math.radians(cameraAngle+ty))) # (ballHeight-cameraHeight)*(1/math.tan(math.radians(cameraAngle+ty)))
+                        print(f'Height: {height} Width: {width} Distance: {distance}')
+                        ws.send("test")
                         plot_one_box(xyxy, im0, label=label, color=colors[int(cls)], line_thickness=3)
 
             # Print time (inference + NMS)
@@ -173,10 +186,14 @@ if __name__ == '__main__':
     print(opt)
 
     with torch.no_grad():
-        
         if opt.update:  # update all models (to fix SourceChangeWarning)
             for opt.weights in ['yolov5s.pt', 'yolov5m.pt', 'yolov5l.pt', 'yolov5x.pt']:
-                detect()
+                # detect()
                 strip_optimizer(opt.weights)
-        else:
-            detect()
+        # else:
+        #     detect()
+
+uri = "ws://localhost:5808"
+ws = websocket.WebSocketApp(uri)
+ws.on_open = detect
+ws.run_forever()
