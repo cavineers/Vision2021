@@ -55,14 +55,6 @@ def butter_lowpass_filtfilt(data, cutoff=1500, fs=50000, order=5):
     b, a = butter_lowpass(cutoff, fs, order=order)
     return filtfilt(b, a, data)  # forward-backward filter
 
-#* web socket section
-async def sendDistance():
-    uri = "ws://localhost:5808"
-    async with websockets.connect(uri) as websocket:
-        targetSchema = "test" # TODO UPDATE SCHEMA HERE
-        await websocket.send(targetSchema)
-#* END
-
 def plot_one_box(x, img, color=None, label=None, line_thickness=None):
     # Plots one bounding box on image img
     tl = line_thickness or round(0.002 * (img.shape[0] + img.shape[1]) / 2) + 1  # line/font thickness
@@ -81,9 +73,6 @@ def plot_one_box(x, img, color=None, label=None, line_thickness=None):
     distance = undefined
     if math.tan(math.radians(cameraAngle+ty)) != 0:
         distance = (ballHeight-cameraHeight) / (math.tan(math.radians(cameraAngle+ty))) # (ballHeight-cameraHeight)*(1/math.tan(math.radians(cameraAngle+ty)))
-    
-    #WebSocket
-    asyncio.get_event_loop().run_until_complete(sendDistance())
 
     #  print(f'Height: {height} Width: {width} Distance: {distance}')
     print(f'{ballHeight}, {cameraHeight}, {cameraAngle}, {ty}, {abs(distance)}')

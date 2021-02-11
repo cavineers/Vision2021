@@ -29,10 +29,10 @@ To get (or update) the trained model:
 To test against images clone this repository and then put the testing images into the test_imgs dir and type `python3 detect.py --weights ./best.pt  --source ./test_imgs` in a terminal to run a detection. It will output the resulted images into the runs directory.
 To run against a webcam in real time run this command `python3 detect.py --weights ./best.pt  --source 0` changing the source to be 0.
 
-### To create a venv (Using python 3.8 since 3.9 does not work yet with certain packages)
+### To create a venv (Using python 3.8+ (if on mac 3.9 does not work...))
 1. download virtualenv with pip3 (`pip3 install virtualenv`)
 2. run `python3 -m venv /path/to/new/virtual/environment`
-3. enter the venv with `source venv/bin/activate`
+3. enter the venv with `source venv/bin/activate`. On 3.9 just run `source bin/activate`
 4. install the required dependancies in the virtual environment using the requirments.txt (on x86 computers only) file: `pip3 install -qr requirements.txt`
 
 Close venv by typing `deactivate` into the terminal.
