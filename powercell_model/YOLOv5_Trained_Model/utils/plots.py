@@ -3,6 +3,8 @@
 import glob
 import os
 import random
+import asyncio
+import websockets
 from copy import copy
 from pathlib import Path
 
@@ -19,6 +21,7 @@ from scipy.signal import butter, filtfilt
 
 from utils.general import xywh2xyxy, xyxy2xywh
 from utils.metrics import fitness
+from encodings import undefined
 
 # Settings
 matplotlib.rc('font', **{'size': 11})
@@ -52,23 +55,38 @@ def butter_lowpass_filtfilt(data, cutoff=1500, fs=50000, order=5):
     b, a = butter_lowpass(cutoff, fs, order=order)
     return filtfilt(b, a, data)  # forward-backward filter
 
+#* web socket section
+async def sendDistance():
+    uri = "ws://localhost:5808"
+    async with websockets.connect(uri) as websocket:
+        targetSchema = "test" # TODO UPDATE SCHEMA HERE
+        await websocket.send(targetSchema)
+#* END
 
 def plot_one_box(x, img, color=None, label=None, line_thickness=None):
     # Plots one bounding box on image img
     tl = line_thickness or round(0.002 * (img.shape[0] + img.shape[1]) / 2) + 1  # line/font thickness
     color = color or [random.randint(0, 255) for _ in range(3)]
     c1, c2 = (int(x[0]), int(x[1])), (int(x[2]), int(x[3])) # x[0] = left line; x[1] = top line; x[2] = right line; x[3] = bottom line;
-    cameraResolution = 1920 * 1080
+    cameraResolutionY = 1080
+    cameraResolutionX = 1920
+    cameraFieldOfView = 25 # 75 # TODO Change this value to match the field of view for the camera
     width = int(x[2]) - int(x[0])
     height = int(x[3]) - int(x[1])
-    ty = (int(1080 / 2) - (int(x[3]) + int(-height / 2))) / 38.6
-    tx = (int(1920 / 2) - (int(x[2]) + int(-width / 2)))
+    ty = (int(1080 / 2) - (int(x[3]) + float(-height / 2))) * (cameraFieldOfView / cameraResolutionY)
+    tx = (int(1920 / 2) - (int(x[2]) + int(-width / 2))) * (cameraFieldOfView / cameraResolutionX)
     cameraHeight = 3 # TODO Change this value to match actual height on the bot
     cameraAngle = 0 # TODO Change this value to match actual angel on the bot
     ballHeight = 3.5
-    distance = (ballHeight-cameraHeight)*(1/math.tan(math.radians(cameraAngle+ty))) # TODO Tune Further...
-    # print(f'Height: {height} Width: {width} Distance: {distance}')
-    print(f'{ballHeight}, {cameraHeight}, {cameraAngle}, {ty}, {distance}')
+    distance = undefined
+    if math.tan(math.radians(cameraAngle+ty)) != 0:
+        distance = (ballHeight-cameraHeight) / (math.tan(math.radians(cameraAngle+ty))) # (ballHeight-cameraHeight)*(1/math.tan(math.radians(cameraAngle+ty)))
+    
+    #WebSocket
+    asyncio.get_event_loop().run_until_complete(sendDistance())
+
+    #  print(f'Height: {height} Width: {width} Distance: {distance}')
+    print(f'{ballHeight}, {cameraHeight}, {cameraAngle}, {ty}, {abs(distance)}')
     cv2.circle(img, (int(1920 / 2), int(1080 / 2)), 10, [255,255,255], -1)
     cv2.circle(img, (int(x[2]) + int(-width / 2),int(x[3]) + int(-height / 2)), 10, [0,0,255], -1)
     cv2.rectangle(img, c1, c2, color, thickness=tl, lineType=cv2.LINE_AA)
