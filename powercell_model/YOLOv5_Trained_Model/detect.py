@@ -137,10 +137,15 @@ def detect(ws):
             print('%sDone. (%.3fs)' % (s, t2 - t1))
 
             # Stream results
-            if view_img:
-                cv2.imshow(str(p), im0)
-                if cv2.waitKey(1) == ord('q'):  # q to quit
-                    raise StopIteration
+            if opt.headless == True:
+                if view_img:
+                    if cv2.waitKey(1) == ord('q'):  # q to quit
+                        raise StopIteration
+            else:
+                if view_img:
+                    cv2.imshow(str(p), im0)
+                    if cv2.waitKey(1) == ord('q'):  # q to quit
+                        raise StopIteration
 
             # Save results (image with detections)
             if save_img:
@@ -151,7 +156,6 @@ def detect(ws):
                         vid_path = save_path
                         if isinstance(vid_writer, cv2.VideoWriter):
                             vid_writer.release()  # release previous video writer
-
                         fourcc = 'mp4v'  # output video codec
                         fps = vid_cap.get(cv2.CAP_PROP_FPS)
                         w = int(vid_cap.get(cv2.CAP_PROP_FRAME_WIDTH))
@@ -183,6 +187,8 @@ if __name__ == '__main__':
     parser.add_argument('--project', default='runs/detect', help='save results to project/name')
     parser.add_argument('--name', default='exp', help='save results to project/name')
     parser.add_argument('--exist-ok', action='store_true', help='existing project/name ok, do not increment')
+    parser.add_argument('--dev', default=False, help='Changes websocket val, default False, use True for localhost')
+    parser.add_argument('--headless', default=True, help='Default = True, Use False to run normally.')
     opt = parser.parse_args()
     print(opt)
 
@@ -195,14 +201,28 @@ if __name__ == '__main__':
         #     detect()
 
 ws = undefined
-try:
-    uri = "ws://localhost:5808"
-    ws = websocket.WebSocketApp(uri)
-    ws.on_open = detect
-    ws.run_forever()
-except:
-    print("ws connection failed.. defaulting to no ws script")
+print(opt.dev)
+if opt.dev == False:
+    try:
+        uri = "ws://10.45.41.2:5808"
+        ws = websocket.WebSocketApp(uri)
+        ws.on_open = detect
+        ws.run_forever()
+    except:
+        print("ws connection failed.. defaulting to no ws script")
+    else:
+        print("WARNING. websocket connection failed... running detect without websocket comms.")
+        ws = "na"
+        detect(ws)
 else:
-    print("WARNING. websocket connection failed... running detect without websocket comms.")
-    ws = "na"
-    detect(ws)
+    try:
+        uri = "ws://localhost:5808"
+        ws = websocket.WebSocketApp(uri)
+        ws.on_open = detect
+        ws.run_forever()
+    except:
+        print("ws connection failed.. defaulting to no ws script")
+    else:
+        print("WARNING. websocket connection failed... running detect without websocket comms.")
+        ws = "na"
+        detect(ws)
