@@ -129,7 +129,8 @@ def detect(ws):
                         if math.tan(math.radians(cameraAngle+ty)) != 0:
                             distance = (ballHeight-cameraHeight) / (math.tan(math.radians(cameraAngle+ty))) # (ballHeight-cameraHeight)*(1/math.tan(math.radians(cameraAngle+ty)))
                         print(f'Height: {height} Width: {width} Distance: {distance}')
-                        ws.send("test")
+                        if ws != "na":
+                            ws.send("test")
                         plot_one_box(xyxy, im0, label=label, color=colors[int(cls)], line_thickness=3)
 
             # Print time (inference + NMS)
@@ -193,7 +194,15 @@ if __name__ == '__main__':
         # else:
         #     detect()
 
-uri = "ws://localhost:5808"
-ws = websocket.WebSocketApp(uri)
-ws.on_open = detect
-ws.run_forever()
+ws = undefined
+try:
+    uri = "ws://localhost:5808"
+    ws = websocket.WebSocketApp(uri)
+    ws.on_open = detect
+    ws.run_forever()
+except:
+    print("ws connection failed.. defaulting to no ws script")
+else:
+    print("WARNING. websocket connection failed... running detect without websocket comms.")
+    ws = "na"
+    detect(ws)
