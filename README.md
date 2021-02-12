@@ -1,4 +1,4 @@
-# 2021_ObjectDetection_Vision
+# Vision 2021
 2021 FIRST FRC Galactic Search Mission Vision Code. This code will be able to run real time object detection for the playing field using an Nvidia Jetson Nano and YOLOv5.
 
 # YOLOv5 Object Detection Information / Docs
@@ -29,6 +29,8 @@ To get (or update) the trained model:
 To test against images clone this repository and then put the testing images into the test_imgs dir and type `python3 detect.py --weights ./best.pt  --source ./test_imgs` in a terminal to run a detection. It will output the resulted images into the runs directory.
 To run against a webcam in real time run this command `python3 detect.py --weights ./best.pt  --source 0` changing the source to be 0.
 
+**Args**: The system defaults to running in headless mode on websocket port ws://10.45.41.2:5808 use `--dev t` and / or `--headless False` to change these defaults to localhost or desktop mode.
+
 ### To create a venv (Using python 3.8+ (if on mac 3.9 does not work...))
 1. download virtualenv with pip3 (`pip3 install virtualenv`)
 2. run `python3 -m venv /path/to/new/virtual/environment`
@@ -58,21 +60,6 @@ Close venv by typing `deactivate` into the terminal.
 
 *To install these packages on ARMarch - 64bit (not raspi) arch see steps below*
 1. Visit [this site to find packages](http://mathinf.com/pytorch/arm64/)
-
-
-# DEPRECIATED temporarily... TensorFlow Items Below (*Depreciated* under new arch built on Yolov5)
-## Resources / Research
-**Note:** this list will be updated as more resources become available...
-
-[Vision on TensorFlow Lite](https://www.tensorflow.org/lite/models/object_detection/overview#model_customization)\
-[TensorFlow Models GitHub Repository](https://github.com/tensorflow/models)\
-[Tranfer Learning with TensorFlow Video Resource](https://www.coursera.org/lecture/device-based-models-tensorflow/transfer-learning-with-tflite-y7OPK)\
-[Already Trained TensorFlow Models](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf1_detection_zoo.md#pixel4-edge-tpu-models)\
-[Custom ML Model Guide](https://towardsdatascience.com/how-to-train-your-own-object-detector-with-tensorflows-object-detector-api-bec72ecfe1d9)
-
-## Methods
-1. We will be using a method called transfer learning to use a previously trained TensorFlow Model to fit our specific requirments.
-2. We can also train a custom model from scratch but that would require more work than the above option but still one that is available.
 
 ### Credits
 *Roboflow*
