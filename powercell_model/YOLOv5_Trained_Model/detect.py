@@ -117,7 +117,7 @@ def detect(ws):
                         c1, c2 = (int(xyxy[0]), int(xyxy[1])), (int(xyxy[2]), int(xyxy[3])) # x[0] = left line; x[1] = top line; x[2] = right line; x[3] = bottom line;
                         cameraResolutionY = 1080
                         cameraResolutionX = 1920
-                        cameraFieldOfView = 25 # 75 # TODO Change this value to match the field of view for the camera
+                        cameraFieldOfView = 75 * 2 # 75 # TODO Change this value to match the field of view for the camera
                         width = int(xyxy[2]) - int(xyxy[0])
                         height = int(xyxy[3]) - int(xyxy[1])
                         ty = (int(1080 / 2) - (int(xyxy[3]) + float(-height / 2))) * (cameraFieldOfView / cameraResolutionY)
