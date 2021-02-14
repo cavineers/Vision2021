@@ -27,7 +27,7 @@ To get (or update) the trained model:
 7. push those files to the repository
 
 To test against images clone this repository and then put the testing images into the test_imgs dir and type `python3 detect.py --weights ./best.pt  --source ./test_imgs` in a terminal to run a detection. It will output the resulted images into the runs directory.
-To run against a webcam in real time run this command `python3 detect.py --weights ./best.pt  --source 0` changing the source to be 0.
+To run against a webcam in real time run this command `python3 detect.py --weights ./best.pt  --source 0 --dev t --headless False` changing the source to be 0.
 
 **Args**: The system defaults to running in headless mode on websocket port ws://10.45.41.2:5808 use `--dev t` and / or `--headless False` to change these defaults to localhost or desktop mode.
 
@@ -47,13 +47,13 @@ Close venv by typing `deactivate` into the terminal.
 2. Install OpenCV `pip install opencv-contrib-python==4.1.0.25` (this may take a while... up to 2 hours total)
 3. Install TorchVision [Here](https://github.com/radimspetlik/pytorch_rpi_builds/blob/master/vision/torchvision-0.8.0a0%2B190a5f8-cp38-cp38-linux_armv7l.whl) Then change the file name to be `torchvision-0.8.0a0+190a5f8-cp37-cp37m-linux_armv7l.whl` (this ensures armv7l arch installable)
 
-*To install packages on Nvidia Jetson Nano -- aarch64 see steps below*
+*To install packages on **Nvidia Jetson Nano** -- aarch64 see steps below*
 1. Download Nvidia Docker container by running `sudo docker pull nvcr.io/nvidia/l4t-pytorch:r32.5.0-pth1.7-py3`
 2. Start the docker container with `sudo docker run -it --device=/dev/video0 --runtime nvidia --net=host --env="DISPLAY" --volume="$HOME/.Xauthority:/root/.Xauthority:rw" nvcr.io/nvidia/l4t-pytorch:r32.5.0-pth1.7-py3`
 3. Clone this repository in the docker image `git clone https://github.com/cavineers/Vision2021.git`
 5. Remove all unwanted folders and packages (everything but the YOLOv5_Trained_Model folder)
-4. cd into the YOLOv5_Traained_Model directory.
-5. Update pip and install packages: `python3 -m pip install --upgrade pip`, `python3 -m pip install --upgrade setuptools`, `pip install -r requirements.txt` (these might take several minutes to finish)
+4. cd into the YOLOv5_Trained_Model directory.
+5. Update pip and install packages: `python3 -m pip install --upgrade pip`, `python3 -m pip install --upgrade setuptools`, `pip install -r requirements.txt` (these will take several minutes to finish)
 6. In a new terminal find the container id for your docker image using `sudo docker ps -a`
 7. Still in the new terminal save the docker container using `sudo docker commit [CONTAINER ID] [IMAGE NAME]` (example image name would be yolov5/cavs:version1)
 8. Run docker instance later `sudo docker run -it --device=/dev/video0 --runtime nvidia --net=host --env="DISPLAY" --volume="$HOME/.Xauthority:/root/.Xauthority:rw" [NEW IMAGE NAME]` (use -rm in the run command if you are not making any changes to the docker image to save space)
