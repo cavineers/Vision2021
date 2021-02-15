@@ -137,7 +137,7 @@ def detect(ws):
             print('%sDone. (%.3fs)' % (s, t2 - t1))
 
             # Stream results
-            if opt.headless == True:
+            if opt.headless == "True" or opt.headless == True:
                 if view_img:
                     if cv2.waitKey(1) == ord('q'):  # q to quit
                         raise StopIteration
