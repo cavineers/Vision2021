@@ -27,7 +27,7 @@ To get (or update) the trained model:
 7. push those files to the repository
 
 To test against images clone this repository and then put the testing images into the test_imgs dir and type `python3 detect.py --weights ./best.pt  --source ./test_imgs` in a terminal to run a detection. It will output the resulted images into the runs directory.
-To run against a webcam in real time run this command `python3 detect.py --weights ./best.pt  --source 0 --dev t --headless False` changing the source to be 0.
+To run against a webcam in real time run this command `python3 detect.py --weights ./best.pt  --source 0 --dev t` changing the source to be 0.
 
 **Args**: The system defaults to running in headless mode on websocket port ws://10.45.41.2:5808 use `--dev t` and / or `--headless False` to change these defaults to localhost or desktop mode.
 
