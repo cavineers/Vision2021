@@ -2,12 +2,15 @@ import argparse
 import time
 from pathlib import Path
 
+from numpy.lib.function_base import interp
+
 import cv2
 import torch
 import torch.backends.cudnn as cudnn
 from numpy import random
 import math
 from math import atan2, degrees
+import threading
 
 from models.experimental import attempt_load
 from utils.datasets import LoadStreams, LoadImages
@@ -104,7 +107,11 @@ def detect(ws):
                     n = (det[:, -1] == c).sum()  # detections per class
                     s += '%g %ss, ' % (n, names[int(c)])  # add to string
 
-                # Write results
+                # WebSocket Sending
+                if ws != "na":
+                    ws.send(str(reversed(det).tolist()).encode('utf-8'))
+                
+                # Write Results
                 for *xyxy, conf, cls in reversed(det):
                     if save_txt:  # Write to file
                         xywh = (xyxy2xywh(torch.tensor(xyxy).view(1, 4)) / gn).view(-1).tolist()  # normalized xywh
@@ -115,22 +122,20 @@ def detect(ws):
                     if save_img or view_img:  # Add bbox to image
                         label = '%s %.2f' % (names[int(cls)], conf)
                         c1, c2 = (int(xyxy[0]), int(xyxy[1])), (int(xyxy[2]), int(xyxy[3])) # x[0] = left line; x[1] = top line; x[2] = right line; x[3] = bottom line;
-                        cameraResolutionY = 1080
-                        cameraResolutionX = 1920
-                        cameraFieldOfView = 75 * 2 # 75 # TODO Change this value to match the field of view for the camera
-                        width = int(xyxy[2]) - int(xyxy[0])
-                        height = int(xyxy[3]) - int(xyxy[1])
-                        ty = (int(1080 / 2) - (int(xyxy[3]) + float(-height / 2))) * (cameraFieldOfView / cameraResolutionY)
-                        tx = (int(1920 / 2) - (int(xyxy[2]) + int(-width / 2))) * (cameraFieldOfView / cameraResolutionX)
-                        cameraHeight = 3 # TODO Change this value to match actual height on the bot
-                        cameraAngle = 0 # TODO Change this value to match actual angel on the bot
-                        ballHeight = 3.5
-                        distance = undefined
-                        if math.tan(math.radians(cameraAngle+ty)) != 0:
-                            distance = (ballHeight-cameraHeight) / (math.tan(math.radians(cameraAngle+ty))) # (ballHeight-cameraHeight)*(1/math.tan(math.radians(cameraAngle+ty)))
-                        print(f'Height: {height} Width: {width} Distance: {distance}')
-                        if ws != "na":
-                            ws.send("test")
+                        # cameraResolutionY = 1080
+                        # cameraResolutionX = 1920
+                        # cameraFieldOfView = 75 * 2 # 75 # TODO Change this value to match the field of view for the camera
+                        # width = int(xyxy[2]) - int(xyxy[0])
+                        # height = int(xyxy[3]) - int(xyxy[1])
+                        # ty = (int(1080 / 2) - (int(xyxy[3]) + float(-height / 2))) * (cameraFieldOfView / cameraResolutionY)
+                        # tx = (int(1920 / 2) - (int(xyxy[2]) + int(-width / 2))) * (cameraFieldOfView / cameraResolutionX)
+                        # cameraHeight = 3 # TODO Change this value to match actual height on the bot
+                        # cameraAngle = 0 # TODO Change this value to match actual angel on the bot
+                        # ballHeight = 3.5
+                        # distance = undefined
+                        # if math.tan(math.radians(cameraAngle+ty)) != 0:
+                        #     distance = (ballHeight-cameraHeight) / (math.tan(math.radians(cameraAngle+ty))) # (ballHeight-cameraHeight)*(1/math.tan(math.radians(cameraAngle+ty)))
+                        # print(f'Height: {height} Width: {width} Distance: {distance}')
                         plot_one_box(xyxy, im0, label=label, color=colors[int(cls)], line_thickness=3)
 
             # Print time (inference + NMS)
@@ -201,28 +206,31 @@ if __name__ == '__main__':
         #     detect()
 
 ws = undefined
-print(opt.dev)
-if opt.dev == False:
-    try:
-        uri = "ws://10.45.41.2:5808"
-        ws = websocket.WebSocketApp(uri)
-        ws.on_open = detect
-        ws.run_forever()
-    except:
-        print("ws connection failed.. defaulting to no ws script")
+def connectSockets():
+    print(opt.dev)
+    if opt.dev == False:
+        try:
+            uri = "ws://10.45.41.2:5808"
+            ws = websocket.WebSocketApp(uri)
+            ws.on_open = detect
+            ws.run_forever()
+        except:
+            print("ws connection failed.. defaulting to no ws script")
+        else:
+            print("WARNING. websocket connection failed... running detect without websocket comms.")
+            ws = "na"
+            detect(ws)
     else:
-        print("WARNING. websocket connection failed... running detect without websocket comms.")
-        ws = "na"
-        detect(ws)
-else:
-    try:
-        uri = "ws://localhost:5808"
-        ws = websocket.WebSocketApp(uri)
-        ws.on_open = detect
-        ws.run_forever()
-    except:
-        print("ws connection failed.. defaulting to no ws script")
-    else:
-        print("WARNING. websocket connection failed... running detect without websocket comms.")
-        ws = "na"
-        detect(ws)
+        try:
+            uri = "ws://localhost:5808"
+            ws = websocket.WebSocketApp(uri)
+            ws.on_open = detect
+            ws.run_forever()
+        except:
+            print("ws connection failed.. defaulting to no ws script")
+        else:
+            print("WARNING. websocket connection failed... running detect without websocket comms.")
+            ws = "na"
+            detect(ws)
+
+connectSockets()
