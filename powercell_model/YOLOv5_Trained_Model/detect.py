@@ -109,7 +109,7 @@ def detect(ws):
 
                 # WebSocket Sending
                 if ws != "na":
-                    ws.send(str(reversed(det).tolist()).encode('utf-8'))
+                    ws.send("04;" + str(reversed(det).tolist()).encode('utf-8'))
                 
                 # Write Results
                 for *xyxy, conf, cls in reversed(det):
