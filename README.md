@@ -42,12 +42,13 @@ Close venv by typing `deactivate` into the terminal.
 ### Installing Dependancies on ARM
 
 **IMPORTANT** *NOTE if you are on raspberry pi (or other ARMv7l - 32bit arch) you will need to install most of these manually...*
-
 1. Install PyTorch [Here](https://github.com/ljk53/pytorch-rpi/blob/master/torch-1.6.0a0%2Bb31f58d-cp37-cp37m-linux_armv7l.whl) from [source](https://github.com/ljk53/pytorch-rpi) once downloading the .whl file run `pip install <PATH TO .whl FILE>`
 2. Install OpenCV `pip install opencv-contrib-python==4.1.0.25` (this may take a while... up to 2 hours total)
 3. Install TorchVision [Here](https://github.com/radimspetlik/pytorch_rpi_builds/blob/master/vision/torchvision-0.8.0a0%2B190a5f8-cp38-cp38-linux_armv7l.whl) Then change the file name to be `torchvision-0.8.0a0+190a5f8-cp37-cp37m-linux_armv7l.whl` (this ensures armv7l arch installable)
 
 *To install packages on **Nvidia Jetson Nano** -- aarch64 see steps below*
+
+*See the .sh files to execute these easily*
 1. Download Nvidia Docker container by running `sudo docker pull nvcr.io/nvidia/l4t-pytorch:r32.5.0-pth1.7-py3`
 2. Start the docker container with `sudo docker run -it --device=/dev/video0 --runtime nvidia --net=host --env="DISPLAY" --volume="$HOME/.Xauthority:/root/.Xauthority:rw" nvcr.io/nvidia/l4t-pytorch:r32.5.0-pth1.7-py3`
 3. Clone this repository in the docker image `git clone https://github.com/cavineers/Vision2021.git`
@@ -58,7 +59,7 @@ Close venv by typing `deactivate` into the terminal.
 7. Still in the new terminal save the docker container using `sudo docker commit [CONTAINER ID] [IMAGE NAME]` (example image name would be yolov5/cavs:version1)
 8. Run docker instance later `sudo docker run -it --device=/dev/video0 --runtime nvidia --net=host --env="DISPLAY" --volume="$HOME/.Xauthority:/root/.Xauthority:rw" [NEW IMAGE NAME]` (use -rm in the run command if you are not making any changes to the docker image to save space)
 
-*To install these packages on ARMarch - 64bit (not raspi) arch see steps below*
+*To install these packages on ARMarch - 64bit (not raspi or jetson) arch see steps below*
 1. Visit [this site to find packages](http://mathinf.com/pytorch/arm64/)
 
 ### Credits

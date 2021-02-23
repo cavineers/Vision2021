@@ -11,6 +11,7 @@ from numpy import random
 import math
 from math import atan2, degrees
 import threading
+from time import monotonic as timer
 
 from models.experimental import attempt_load
 from utils.datasets import LoadStreams, LoadImages
@@ -109,7 +110,7 @@ def detect(ws):
 
                 # WebSocket Sending
                 if ws != "na":
-                    ws.send("04;" + str(reversed(det).tolist()).encode('utf-8'))
+                    ws.send("04;" + str(reversed(det).tolist())) # .encode('utf-8')
                 
                 # Write Results
                 for *xyxy, conf, cls in reversed(det):
@@ -206,31 +207,38 @@ if __name__ == '__main__':
         #     detect()
 
 ws = undefined
+
+def on_close(ws):
+    print("Connection to socket closed... Attempting Reconnect.")
+    time.sleep(2)
+    connectSockets()
+
+def on_open(ws):
+    print("Connection Established")
+
+def on_error(ws):
+    print("Connection to socket failed... Attempting Reconnect.")
+    time.sleep(2)
+    connectSockets()
+
 def connectSockets():
-    print(opt.dev)
     if opt.dev == False:
         try:
             uri = "ws://10.45.41.2:5808"
-            ws = websocket.WebSocketApp(uri)
+            ws = websocket.WebSocketApp(uri, on_open = on_open, on_error = on_error, on_close = on_close)
             ws.on_open = detect
             ws.run_forever()
         except:
-            print("ws connection failed.. defaulting to no ws script")
-        else:
             print("WARNING. websocket connection failed... running detect without websocket comms.")
-            ws = "na"
-            detect(ws)
+            # ws = "na"
+            # detect(ws)
     else:
         try:
             uri = "ws://localhost:5808"
-            ws = websocket.WebSocketApp(uri)
+            ws = websocket.WebSocketApp(uri, on_open = on_open, on_error = on_error, on_close = on_close)
             ws.on_open = detect
             ws.run_forever()
         except:
             print("ws connection failed.. defaulting to no ws script")
-        else:
-            print("WARNING. websocket connection failed... running detect without websocket comms.")
-            ws = "na"
-            detect(ws)
 
 connectSockets()
