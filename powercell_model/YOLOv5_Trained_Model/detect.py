@@ -228,6 +228,7 @@ def connectSockets():
             ws = websocket.WebSocketApp(uri, on_open = on_open, on_error = on_error, on_close = on_close)
             ws.on_open = detect
             ws.run_forever()
+            ws.send("08;")
         except:
             print("WARNING. websocket connection failed... running detect without websocket comms.")
             # ws = "na"
@@ -238,6 +239,7 @@ def connectSockets():
             ws = websocket.WebSocketApp(uri, on_open = on_open, on_error = on_error, on_close = on_close)
             ws.on_open = detect
             ws.run_forever()
+            ws.send("08;")
         except:
             print("ws connection failed.. defaulting to no ws script")
 
