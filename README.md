@@ -46,7 +46,7 @@ Close venv by typing `deactivate` into the terminal.
 2. Install OpenCV `pip install opencv-contrib-python==4.1.0.25` (this may take a while... up to 2 hours total)
 3. Install TorchVision [Here](https://github.com/radimspetlik/pytorch_rpi_builds/blob/master/vision/torchvision-0.8.0a0%2B190a5f8-cp38-cp38-linux_armv7l.whl) Then change the file name to be `torchvision-0.8.0a0+190a5f8-cp37-cp37m-linux_armv7l.whl` (this ensures armv7l arch installable)
 
-*To install packages on **Nvidia Jetson Nano** -- aarch64 see steps below*
+## To install packages on Nvidia Jetson Nano -- aarch64 see steps below
 
 *See the .sh files to execute these easily*
 1. Download Nvidia Docker container by running `sudo docker pull nvcr.io/nvidia/l4t-pytorch:r32.5.0-pth1.7-py3`

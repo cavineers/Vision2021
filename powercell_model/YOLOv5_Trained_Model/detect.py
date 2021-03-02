@@ -8,10 +8,6 @@ import cv2
 import torch
 import torch.backends.cudnn as cudnn
 from numpy import random
-import math
-from math import atan2, degrees
-import threading
-from time import monotonic as timer
 
 from models.experimental import attempt_load
 from utils.datasets import LoadStreams, LoadImages
@@ -20,7 +16,6 @@ from utils.general import check_img_size, non_max_suppression, apply_classifier,
 from utils.plots import plot_one_box
 from utils.torch_utils import select_device, load_classifier, time_synchronized
 import websocket
-import asyncio
 from encodings import undefined
 
 def detect(ws):
@@ -125,13 +120,13 @@ def detect(ws):
                         c1, c2 = (int(xyxy[0]), int(xyxy[1])), (int(xyxy[2]), int(xyxy[3])) # x[0] = left line; x[1] = top line; x[2] = right line; x[3] = bottom line;
                         # cameraResolutionY = 1080
                         # cameraResolutionX = 1920
-                        # cameraFieldOfView = 75 * 2 # 75 # TODO Change this value to match the field of view for the camera
+                        # cameraFieldOfView = 75 * 2 # 75
                         # width = int(xyxy[2]) - int(xyxy[0])
                         # height = int(xyxy[3]) - int(xyxy[1])
                         # ty = (int(1080 / 2) - (int(xyxy[3]) + float(-height / 2))) * (cameraFieldOfView / cameraResolutionY)
                         # tx = (int(1920 / 2) - (int(xyxy[2]) + int(-width / 2))) * (cameraFieldOfView / cameraResolutionX)
-                        # cameraHeight = 3 # TODO Change this value to match actual height on the bot
-                        # cameraAngle = 0 # TODO Change this value to match actual angel on the bot
+                        # cameraHeight = 3
+                        # cameraAngle = 0
                         # ballHeight = 3.5
                         # distance = undefined
                         # if math.tan(math.radians(cameraAngle+ty)) != 0:
@@ -199,18 +194,18 @@ if __name__ == '__main__':
     print(opt)
 
     with torch.no_grad():
-        if opt.update:  # update all models (to fix SourceChangeWarning)
+        if opt.update:
             for opt.weights in ['yolov5s.pt', 'yolov5m.pt', 'yolov5l.pt', 'yolov5x.pt']:
                 # detect()
                 strip_optimizer(opt.weights)
         # else:
-        #     detect()
+        #     detect("blah")
 
 ws = undefined
 
 def on_close(ws):
     print("Connection to socket closed... Attempting Reconnect.")
-    time.sleep(2)
+    time.sleep(1)
     connectSockets()
 
 def on_open(ws):
@@ -218,29 +213,23 @@ def on_open(ws):
 
 def on_error(ws):
     print("Connection to socket failed... Attempting Reconnect.")
-    time.sleep(2)
+    time.sleep(1)
     connectSockets()
 
 def connectSockets():
     if opt.dev == False:
-        try:
-            uri = "ws://10.45.41.2:5808"
-            ws = websocket.WebSocketApp(uri, on_open = on_open, on_error = on_error, on_close = on_close)
-            ws.on_open = detect
-            ws.run_forever()
-            ws.send("08;")
-        except:
-            print("WARNING. websocket connection failed... running detect without websocket comms.")
-            # ws = "na"
-            # detect(ws)
+        uri = "ws://10.45.41.2:5808"
+        ws = websocket.WebSocketApp(uri, on_open = on_open, on_error = on_error, on_close = on_close)
+        ws.on_open = detect
+        ws.run_forever()
+        ws.send("08;")
+    elif opt.dev == "na":
+        detect(undefined)
     else:
-        try:
-            uri = "ws://localhost:5808"
-            ws = websocket.WebSocketApp(uri, on_open = on_open, on_error = on_error, on_close = on_close)
-            ws.on_open = detect
-            ws.run_forever()
-            ws.send("08;")
-        except:
-            print("ws connection failed.. defaulting to no ws script")
+        uri = "ws://localhost:5808"
+        ws = websocket.WebSocketApp(uri, on_open = on_open, on_error = on_error, on_close = on_close)
+        ws.on_open = detect
+        ws.run_forever()
+        ws.send("08;")
 
 connectSockets()

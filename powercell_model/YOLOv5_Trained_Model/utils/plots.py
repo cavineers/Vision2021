@@ -4,7 +4,6 @@ import glob
 import os
 import random
 import asyncio
-import websockets
 from copy import copy
 from pathlib import Path
 
