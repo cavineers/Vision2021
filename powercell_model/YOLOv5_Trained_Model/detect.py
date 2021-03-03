@@ -20,6 +20,7 @@ from encodings import undefined
 
 def detect(ws):
     save_img=False
+    first=False
     # global ws save_img=False
     source, weights, view_img, save_txt, imgsz = opt.source, opt.weights, opt.view_img, opt.save_txt, opt.img_size
     webcam = source.isnumeric() or source.endswith('.txt') or source.lower().startswith(
@@ -105,6 +106,9 @@ def detect(ws):
 
                 # WebSocket Sending
                 if ws != "na":
+                    if first == False:
+                        first = True
+                        ws.send("08;")
                     ws.send("04;" + str(reversed(det).tolist())) # .encode('utf-8')
                 
                 # Write Results
@@ -222,7 +226,6 @@ def connectSockets():
         ws = websocket.WebSocketApp(uri, on_open = on_open, on_error = on_error, on_close = on_close)
         ws.on_open = detect
         ws.run_forever()
-        ws.send("08;")
     elif opt.dev == "na":
         detect(undefined)
     else:
@@ -230,6 +233,5 @@ def connectSockets():
         ws = websocket.WebSocketApp(uri, on_open = on_open, on_error = on_error, on_close = on_close)
         ws.on_open = detect
         ws.run_forever()
-        ws.send("08;")
 
 connectSockets()
