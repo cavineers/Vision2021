@@ -67,7 +67,7 @@ Enter this into the nano:
 
 exec > /tmp/rc-local.out 2>&1;set -x
 
-sudo sh /path/to/sh/open-u.sh
+sudo sh /path/to/sh/open.sh
 
 *To install these packages on ARMarch - 64bit (not raspi or jetson) arch see steps below*
 1. Visit [this site to find packages](http://mathinf.com/pytorch/arm64/)
