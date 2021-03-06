@@ -227,7 +227,7 @@ def connectSockets():
         ws.on_open = detect
         ws.run_forever()
     elif opt.dev == "na":
-        detect(undefined)
+        detect("na")
     else:
         uri = "ws://localhost:5808"
         ws = websocket.WebSocketApp(uri, on_open = on_open, on_error = on_error, on_close = on_close)
