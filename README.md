@@ -59,7 +59,9 @@ Close venv by typing `deactivate` into the terminal.
 7. Still in the new terminal save the docker container using `sudo docker commit [CONTAINER ID] [IMAGE NAME]` (example image name would be yolov5/cavs:version1)
 8. Run docker instance later `sudo docker run -it --device=/dev/video0 --runtime nvidia --net=host --env="DISPLAY" --volume="$HOME/.Xauthority:/root/.Xauthority:rw" [NEW IMAGE NAME]` (use -rm in the run command if you are not making any changes to the docker image to save space)
 
-## To Make Jetson Nano Run open-u.sh on boot use the following
+*Note: [Static IP](https://stackoverflow.com/questions/66384210/how-te-set-a-static-ip-for-a-jetson-nano) resources.*
+
+## To Make Jetson Nano Run open.sh on boot use the following
 In a new terminal type `sudo nano /etc/rc.local`
 Enter this into the nano:
 
@@ -75,4 +77,3 @@ sudo sh /path/to/sh/open.sh
 ### Credits
 *Roboflow*
 *YOLOv5*
-*TensorFlow*
