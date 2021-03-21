@@ -209,17 +209,17 @@ if __name__ == '__main__':
 
 ws = undefined
 
-def on_close(ws):
+def on_close(ws, test):
     global first
     print("Connection to socket closed... Attempting Reconnect.")
     first=False
     time.sleep(1)
     connectSockets()
 
-def on_open(ws):
+def on_open(ws, test):
     print("Connection Established")
 
-def on_error(ws):
+def on_error(ws, test):
     global first
     print("Connection to socket failed... Attempting Reconnect.")
     first=False
@@ -235,10 +235,21 @@ def connectSockets():
         ws.run_forever()
     elif opt.dev == "na":
         detect("na")
-    else:
-        uri = "ws://192.168.50.116:5808"
+    elif opt.dev == "t":
+        uri = "ws://localhost:5808"
         ws = websocket.WebSocketApp(uri, on_open = on_open, on_error = on_error, on_close = on_close)
         ws.on_open = detect
         ws.run_forever()
+    else:
+        if(opt.dev in ("ws://")):
+            uri = opt.dev
+            ws = websocket.WebSocketApp(uri, on_open = on_open, on_error = on_error, on_close = on_close)
+            ws.on_open = detect
+            ws.run_forever()
+        else:
+            uri = "ws://localhost:5808"
+            ws = websocket.WebSocketApp(uri, on_open = on_open, on_error = on_error, on_close = on_close)
+            ws.on_open = detect
+            ws.run_forever()
 
 connectSockets()
