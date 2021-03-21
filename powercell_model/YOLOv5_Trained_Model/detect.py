@@ -241,6 +241,7 @@ def connectSockets():
         ws.on_open = detect
         ws.run_forever()
     else:
+        print(opt.dev)
         uri = opt.dev
         ws = websocket.WebSocketApp(uri, on_open = on_open, on_error = on_error, on_close = on_close)
         ws.on_open = detect
