@@ -271,13 +271,13 @@ class LoadStreams:  # multiple IP or RTSP cameras
         for i, s in enumerate(sources):
             # Start the thread to read frames from the video stream
             print('%g/%g: %s... ' % (i + 1, n, s), end='')
-            cap = cv2.VideoCapture(eval(s) if s.isnumeric() else s)
-            assert cap.isOpened(), 'Failed to open %s' % s
-            w = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-            h = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-            fps = cap.get(cv2.CAP_PROP_FPS) % 100
-            _, self.imgs[i] = cap.read()  # guarantee first frame
-            thread = Thread(target=self.update, args=([i, cap]), daemon=True)
+            self.cap = cv2.VideoCapture(eval(s) if s.isnumeric() else s)
+            assert self.cap.isOpened(), 'Failed to open %s' % s
+            w = int(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+            h = int(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+            fps = self.cap.get(cv2.CAP_PROP_FPS) % 100
+            _, self.imgs[i] = self.cap.read()  # guarantee first frame
+            thread = Thread(target=self.update, args=([i]), daemon=True)
             print(' success (%gx%g at %.2f FPS).' % (w, h, fps))
             thread.start()
         print('')  # newline
@@ -288,17 +288,20 @@ class LoadStreams:  # multiple IP or RTSP cameras
         if not self.rect:
             print('WARNING: Different stream shapes detected. For optimal performance supply similarly-shaped streams.')
 
-    def update(self, index, cap):
+    def update(self, index):
         # Read next stream frame in a daemon thread
         n = 0
-        while cap.isOpened():
+        while self.cap.isOpened():
             n += 1
             # _, self.imgs[index] = cap.read()
-            cap.grab()
+            self.cap.grab()
             if n == 4:  # read every 4th frame
-                _, self.imgs[index] = cap.retrieve()
+                _, self.imgs[index] = self.cap.retrieve()
                 n = 0
             time.sleep(0.01)  # wait time
+
+    def destroy(self):
+        self.cap.release()
 
     def __iter__(self):
         self.count = -1

@@ -19,9 +19,10 @@ import websocket
 from encodings import undefined
 
 first=False
+dataset = undefined
 
 def detect(ws):
-    global first
+    global first, dataset
     save_img=False
     # global ws save_img=False
     source, weights, view_img, save_txt, imgsz = opt.source, opt.weights, opt.view_img, opt.save_txt, opt.img_size
@@ -210,9 +211,10 @@ if __name__ == '__main__':
 ws = undefined
 
 def on_close(ws, test):
-    global first
+    global first, dataset
     print("Connection to socket closed... Attempting Reconnect.")
     first=False
+    dataset.destroy()
     time.sleep(1)
     connectSockets()
 
@@ -220,9 +222,10 @@ def on_open(ws, test):
     print("Connection Established")
 
 def on_error(ws, test):
-    global first
+    global first, dataset
     print("Connection to socket failed... Attempting Reconnect.")
     first=False
+    dataset.destroy()
     time.sleep(1)
     connectSockets()
 
