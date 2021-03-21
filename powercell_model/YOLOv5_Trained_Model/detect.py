@@ -18,9 +18,11 @@ from utils.torch_utils import select_device, load_classifier, time_synchronized
 import websocket
 from encodings import undefined
 
+first=False
+
 def detect(ws):
+    global first
     save_img=False
-    first=False
     # global ws save_img=False
     source, weights, view_img, save_txt, imgsz = opt.source, opt.weights, opt.view_img, opt.save_txt, opt.img_size
     webcam = source.isnumeric() or source.endswith('.txt') or source.lower().startswith(
@@ -208,7 +210,9 @@ if __name__ == '__main__':
 ws = undefined
 
 def on_close(ws):
+    global first
     print("Connection to socket closed... Attempting Reconnect.")
+    first=False
     time.sleep(1)
     connectSockets()
 
@@ -216,11 +220,14 @@ def on_open(ws):
     print("Connection Established")
 
 def on_error(ws):
+    global first
     print("Connection to socket failed... Attempting Reconnect.")
+    first=False
     time.sleep(1)
     connectSockets()
 
 def connectSockets():
+    print("Attempting Initial Websocket Connection")
     if opt.dev == False:
         uri = "ws://10.45.41.2:5808"
         ws = websocket.WebSocketApp(uri, on_open = on_open, on_error = on_error, on_close = on_close)
@@ -229,7 +236,7 @@ def connectSockets():
     elif opt.dev == "na":
         detect("na")
     else:
-        uri = "ws://localhost:5808"
+        uri = "ws://192.168.50.116:5808"
         ws = websocket.WebSocketApp(uri, on_open = on_open, on_error = on_error, on_close = on_close)
         ws.on_open = detect
         ws.run_forever()
