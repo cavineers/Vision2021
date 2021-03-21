@@ -214,7 +214,7 @@ def on_close(ws, test):
     global first, dataset
     print("Connection to socket closed... Attempting Reconnect.")
     first=False
-    dataset.destroy()
+    # dataset.destroy()
     time.sleep(1)
     connectSockets()
 
@@ -225,7 +225,7 @@ def on_error(ws, test):
     global first, dataset
     print("Connection to socket failed... Attempting Reconnect.")
     first=False
-    dataset.destroy()
+    # dataset.destroy()
     time.sleep(1)
     connectSockets()
 
