@@ -18,11 +18,18 @@ from utils.torch_utils import select_device, load_classifier, time_synchronized
 import websocket
 from encodings import undefined
 
+# Default values of globals
 first=False
 dataset = undefined
+option = undefined
+weights = undefined
+device = undefined
+imgsz = undefined
+model = undefined
+half = undefined
 
 def detect(ws):
-    global first, dataset
+    global first, dataset, model
     save_img=False
     # global ws save_img=False
     source, weights, view_img, save_txt, imgsz = opt.source, opt.weights, opt.view_img, opt.save_txt, opt.img_size
@@ -35,14 +42,6 @@ def detect(ws):
 
     # Initialize
     set_logging()
-    device = select_device(opt.device)
-    half = device.type != 'cpu'  # half precision only supported on CUDA
-
-    # Load model
-    model = attempt_load(weights, map_location=device)  # load FP32 model
-    imgsz = check_img_size(imgsz, s=model.stride.max())  # check img_size
-    if half:
-        model.half()  # to FP16
 
     # Second-stage classifier
     classify = False
@@ -177,6 +176,20 @@ def detect(ws):
 
     print('Done. (%.3fs)' % (time.time() - t0))
 
+def setup(opt):
+    global option, weights, device, imgsz, model, half
+
+    # Setup global values, and load model
+    option = opt
+    weights = option.weights
+    device = select_device(option.device)
+    imgsz = option.source
+    model = attempt_load(weights, map_location=device)
+    imgsz = check_img_size(imgsz, s=model.stride.max())
+    half = device.type != 'cpu'
+    if half:
+        model.half()  # to FP16
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--weights', nargs='+', type=str, default='yolov5s.pt', help='model.pt path(s)')
@@ -198,6 +211,7 @@ if __name__ == '__main__':
     parser.add_argument('--dev', default=False, help='Changes websocket val, default False, use True for localhost')
     parser.add_argument('--headless', default=True, help='Default = True, Use False to run normally.')
     opt = parser.parse_args()
+    setup(opt)
     print(opt)
 
     with torch.no_grad():

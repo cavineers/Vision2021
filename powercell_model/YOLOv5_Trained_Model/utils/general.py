@@ -54,6 +54,7 @@ def check_git_status():
 
 
 def check_img_size(img_size, s=32):
+    img_size = int(img_size)
     # Verify img_size is a multiple of stride s
     new_size = make_divisible(img_size, int(s))  # ceil gs-multiple
     if new_size != img_size:
@@ -94,6 +95,7 @@ def check_dataset(dict):
 
 def make_divisible(x, divisor):
     # Returns x evenly divisible by divisor
+    x = int(x)
     return math.ceil(x / divisor) * divisor
 
 
