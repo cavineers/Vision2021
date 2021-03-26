@@ -17,6 +17,13 @@ from utils.plots import plot_one_box
 from utils.torch_utils import select_device, load_classifier, time_synchronized
 import websocket
 from encodings import undefined
+import sys
+try:
+    import thread
+except ImportError:
+    import _thread as thread
+import time
+# sys.setrecursionlimit(sys.maxsize)
 
 # Default values of globals
 first=False
@@ -27,9 +34,11 @@ device = undefined
 imgsz = undefined
 model = undefined
 half = undefined
+ws = undefined
 
-def detect(ws):
-    global first, dataset, model
+def detect():
+    print("Starting detect method")
+    global first, dataset, model, ws
     save_img=False
     # global ws save_img=False
     source, weights, view_img, save_txt, imgsz = opt.source, opt.weights, opt.view_img, opt.save_txt, opt.img_size
@@ -110,8 +119,14 @@ def detect(ws):
                 if ws != "na":
                     if first == False:
                         first = True
-                        ws.send("08;")
-                    ws.send("04;" + str(reversed(det).tolist())) # .encode('utf-8')
+                        try:
+                            ws.send("08;")
+                        except:
+                            print("disconnected1")
+                    try:
+                        ws.send("04;" + str(reversed(det).tolist())) # .encode('utf-8')
+                    except:
+                        print("disconnected2")
                 
                 # Write Results
                 for *xyxy, conf, cls in reversed(det):
@@ -177,6 +192,7 @@ def detect(ws):
     print('Done. (%.3fs)' % (time.time() - t0))
 
 def setup(opt):
+    print("running setup")
     global option, weights, device, imgsz, model, half
 
     # Setup global values, and load model
@@ -191,6 +207,7 @@ def setup(opt):
         model.half()  # to FP16
 
 if __name__ == '__main__':
+    print("Parsing...")
     parser = argparse.ArgumentParser()
     parser.add_argument('--weights', nargs='+', type=str, default='yolov5s.pt', help='model.pt path(s)')
     parser.add_argument('--source', type=str, default='data/images', help='source')  # file/folder, 0 for webcam
@@ -224,44 +241,102 @@ if __name__ == '__main__':
 
 ws = undefined
 
-def on_close(ws, test):
+def on_close(ws, test="dumb_library"):
     global first, dataset
     print("Connection to socket closed... Attempting Reconnect.")
     first=False
-    dataset.destroy()
-    time.sleep(1)
-    connectSockets()
+    # try:
+        # dataset.destroy()
+    # except:
+    #     print("dataset destroy failed")
+    time.sleep(10000)
+    # print(num)
+    # if (num > 2):
+    #     print("recursive, breeaking")
+    #     return
+    # else:
+    #     print("root, connecting...")
+    # connectSockets(num)
 
-def on_open(ws, test):
-    print("Connection Established")
+def on_open(ws, test="dumb_library"):
+    print("Connected to Websockets")
 
-def on_error(ws, test):
+def on_error(ws, test="dumb_library"):
     global first, dataset
     print("Connection to socket failed... Attempting Reconnect.")
     first=False
-    dataset.destroy()
-    time.sleep(1)
-    connectSockets()
+    # try:
+        # dataset.destroy()
+    # except:
+    #     print("dataset destroy failed")
+    time.sleep(10000)
+    # print(num)
+    # if (num > 2):
+    #     print("recursive, breeaking")
+    #     return
+    # else:
+    #     print("root, connecting...")
+    # connectSockets(num)
 
-def connectSockets():
+def connectSockets(num):
+    global ws
+    websocket.enableTrace(True)
+    # if (num <= 1):
     print("Attempting Initial Websocket Connection")
     if opt.dev == False:
         uri = "ws://10.45.41.2:5808"
-        ws = websocket.WebSocketApp(uri, on_open = on_open, on_error = on_error, on_close = on_close)
-        ws.on_open = detect
+        ws = websocket.WebSocketApp(uri, on_open = detect, on_error = on_error, on_close = on_close)
+        # ws = websocket.WebSocketApp(uri, on_open = detect, on_error = lambda ws, test="12345": print("test"), on_close = lambda ws, test="12345": on_close(ws, test, num + 1))
         ws.run_forever()
     elif opt.dev == "na":
-        detect("na")
+        detect()
     elif opt.dev == "t":
         uri = "ws://localhost:5808"
         ws = websocket.WebSocketApp(uri, on_open = on_open, on_error = on_error, on_close = on_close)
-        ws.on_open = detect
+        # ws = websocket.WebSocketApp(uri, on_open = detect, on_error = lambda ws, test="12345": print("test"), on_close = lambda ws, test="12345": on_close(ws, test, num + 1))
         ws.run_forever()
     else:
         print(opt.dev)
         uri = opt.dev
-        ws = websocket.WebSocketApp(uri, on_open = on_open, on_error = on_error, on_close = on_close)
-        ws.on_open = detect
+        ws = websocket.WebSocketApp(uri, on_open = detect, on_error = on_error, on_close = on_close)
+        # ws = websocket.WebSocketApp(uri, on_open = detect, on_error = lambda ws, test="12345": print("test"), on_close = lambda ws, test="12345": on_close(ws, test, num + 1))
         ws.run_forever()
 
-connectSockets()
+# Ping method
+def run(*args):
+    global ws
+    print("Ping thread started")
+    while True:
+        time.sleep(10)
+        try:
+            ws.send("00;ping")
+        except:
+            print("who cares")
+            if opt.dev == False:
+                uri = "ws://10.45.41.2:5808"
+                ws = websocket.WebSocketApp(uri, on_open = detect, on_error = on_error, on_close = on_close)
+                # ws = websocket.WebSocketApp(uri, on_open = detect, on_error = lambda ws, test="12345": print("test"), on_close = lambda ws, test="12345": on_close(ws, test, num + 1))
+                ws.run_forever()
+            elif opt.dev == "na":
+                detect()
+            elif opt.dev == "t":
+                uri = "ws://localhost:5808"
+                ws = websocket.WebSocketApp(uri, on_open = on_open, on_error = on_error, on_close = on_close)
+                # ws = websocket.WebSocketApp(uri, on_open = detect, on_error = lambda ws, test="12345": print("test"), on_close = lambda ws, test="12345": on_close(ws, test, num + 1))
+                ws.run_forever()
+            else:
+                print(opt.dev)
+                uri = opt.dev
+                ws = websocket.WebSocketApp(uri, on_open = detect, on_error = on_error, on_close = on_close)
+                # ws = websocket.WebSocketApp(uri, on_open = detect, on_error = lambda ws, test="12345": print("test"), on_close = lambda ws, test="12345": on_close(ws, test, num + 1))
+                ws.run_forever()
+    print("Ping thread ended")
+
+# Start threads
+print("Starting threads")
+thread.start_new_thread(run, ())
+thread.start_new_thread((lambda arg="": detect()), ())
+
+# Initial Connect
+connectSockets(0)
+
