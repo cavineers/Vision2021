@@ -242,7 +242,7 @@ def connectSockets():
     print("Attempting Initial Websocket Connection")
     if opt.dev == False:
         uri = "ws://10.45.41.2:5808"
-        ws = websocket.WebSocketApp(uri, on_open = detect) #on_error = on_error, on_close = on_close
+        ws = websocket.WebSocketApp(uri, on_open = detect, on_error = on_error, on_close = on_close)
         while True:
             try:
                 ws.run_forever()
@@ -261,7 +261,7 @@ def connectSockets():
     else:
         print(opt.dev)
         uri = opt.dev
-        ws = websocket.WebSocketApp(uri, on_open = detect) #on_error = on_error, on_close = on_close
+        ws = websocket.WebSocketApp(uri, on_open = detect, on_error = on_error, on_close = on_close)
         while True:
             try:
                 ws.run_forever()
