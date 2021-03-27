@@ -224,21 +224,19 @@ if __name__ == '__main__':
 
 ws = undefined
 
-# def on_close(ws, test):
-#     global first, dataset
-#     print("Connection to socket closed... Attempting Reconnect.")
-#     first=False
-#     dataset.destroy()
-#     time.sleep(1)
-#     connectSockets()
+def on_close(ws):
+    global first, dataset
+    print("Connection to socket closed... Attempting Reconnect.")
+    first=False
+    dataset.destroy()
+    time.sleep(1)
 
-# def on_error(ws, test):
-#     global first, dataset
-#     print("Connection to socket failed... Attempting Reconnect.")
-#     first=False
-#     dataset.destroy()
-#     time.sleep(1)
-#     connectSockets()
+def on_error(ws, test):
+    global first, dataset
+    print("Connection to socket failed... Attempting Reconnect.")
+    first=False
+    dataset.destroy()
+    time.sleep(1)
 
 def connectSockets():
     print("Attempting Initial Websocket Connection")
@@ -254,7 +252,7 @@ def connectSockets():
         detect("na")
     elif opt.dev == "t":
         uri = "ws://localhost:5808"
-        ws = websocket.WebSocketApp(uri, on_open = detect) #on_error = on_error, on_close = on_close
+        ws = websocket.WebSocketApp(uri, on_open = detect, on_error = on_error, on_close = on_close)
         while True:
             try:
                 ws.run_forever()
